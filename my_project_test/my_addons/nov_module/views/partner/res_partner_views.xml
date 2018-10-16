@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- inherit partner form view -->
+        <record id="view_res_partner_form_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+            	<xpath expr="//sheet" position="before">
+	            	<header>
+	            		<field name="state"  widget="statusbar" statusbar_visible="no_validated,validated"/>
+	            	</header>
+	            </xpath>
+            	<xpath expr="//page[@name='sales_purchases']" position="after">
+            		<page name="other_informations" string="Other Informations">
+            			<group>
+            				<field name="compte"/>
+            				<field name="ice"/>
+            				<field name="rc"/>
+            			</group>
+            		</page>
+            	</xpath>
+
+            	<xpath expr="//notebook/page/field/form/sheet/group/group/field[@name='function']" position="after">
+            		<field name="compte"/>
+            		<field name="ice"/>
+            		<field name="rc"/>
+            	</xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
