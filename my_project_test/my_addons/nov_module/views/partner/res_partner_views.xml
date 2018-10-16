@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
             	<xpath expr="//sheet" position="before">
 	            	<header>
+                        <button name="button_validate_partner" string="Validate" type="object" states="no_validated" class="btn-primary"/>
 	            		<field name="state"  widget="statusbar" statusbar_visible="no_validated,validated"/>
 	            	</header>
 	            </xpath>
@@ -18,6 +19,7 @@
             				<field name="compte"/>
             				<field name="ice"/>
             				<field name="rc"/>
+                            <field name="cnss"/>
             			</group>
             		</page>
             	</xpath>
@@ -26,6 +28,7 @@
             		<field name="compte"/>
             		<field name="ice"/>
             		<field name="rc"/>
+                    <field name="cnss"/>
             	</xpath>
             </field>
         </record>
