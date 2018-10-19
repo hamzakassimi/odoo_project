@@ -36,6 +36,12 @@ class ResPartner(models.Model):
         selection='get_selection_state'
     )
 
+    limit_customer = fields.Float(
+        string='Limit Customer',
+        required = True,
+        default = 0.0
+    )
+
 
     # ------------------------------------------------------------------------
     # CONSTRAINTS
