@@ -18,18 +18,11 @@ class SaleOrder(models.Model):
     # METHODS
     # ------------------------------------------------------------------------
 
-    @api.model
-    def create(self,values):
-        res = super(SaleOrder, self).create(values)
-        if res.partner_id.state != 'validated':
-            raise ValidationError(_('you can not create a so for non validated customer'))
-        return res
-
     @api.multi
-    def write(self,values):
-        res =  super(SaleOrder, self).write(values)
+    def _action_confirm(self):
         for record in self:
             if record.partner_id.state != 'validated':
-                raise ValidationError(_('you can not create a so for non validated customer'))
-            return res
-
+                raise ValidationError(_('you can not confirm an so for non validated customer'))
+            if record.partner_id.limit_customer < record.amount_total:
+                raise ValidationError(_('the customer limit is less than the amount total of this SO'))
+        return super(SaleOrder, self)._action_confirm()
