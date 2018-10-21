@@ -23,7 +23,7 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/partner/res_partner_views.xml',
     ],
     # only loaded in demonstration mode

@@ -21,8 +21,16 @@ class SaleOrder(models.Model):
     @api.multi
     def _action_confirm(self):
         for record in self:
+            totals_amount = 0.0
+            related_sales = self.env['sale.order'].search([('partner_id','=',record.partner_id.id),('state','=','sale')])
             if record.partner_id.state != 'validated':
-                raise ValidationError(_('you can not confirm an so for non validated customer'))
-            if record.partner_id.limit_customer < record.amount_total:
-                raise ValidationError(_('the customer limit is less than the amount total of this SO'))
+                raise ValidationError(_('you can not confirm a sale order for non validated customer'))
+            if related_sales:
+                for so in related_sales:
+                    totals_amount += so.amount_total
+            else:
+                totals_amount = 0.0
+            for credit in record.partner_id.partner_credits_ids:
+                if (totals_amount + record.amount_total) <= credit.partner_credit:
+                    raise ValidationError(_('the amount total of partner SOs is less than the customer limit :%s , in the comapny %s ') %(str(credit.partner_credit) ,credit.company_id.name))
         return super(SaleOrder, self)._action_confirm()
