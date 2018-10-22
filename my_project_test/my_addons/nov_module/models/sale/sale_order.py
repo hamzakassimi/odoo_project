@@ -17,6 +17,19 @@ class SaleOrder(models.Model):
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------
+    
+    @api.multi
+    def _notify_email_overdrawn_partner_credit(self):
+        for record in self:
+            template = self.env.ref('nov_module.email_template_overdrawn_partner_credit')
+            try:
+                template.browse(template.id).send_mail(record.id)
+                print('********',                template.browse(template.id).send_mail(record.id)
+)
+            except Exception as exp:
+                self.env.cr.rollback()
+                logger.error('Failed to Send mail of overdrawn rentals')
+                logger.error(str(exp))
 
     @api.multi
     def _action_confirm(self):
@@ -32,5 +45,6 @@ class SaleOrder(models.Model):
                 totals_amount = 0.0
             for credit in record.partner_id.partner_credits_ids:
                 if (totals_amount + record.amount_total) <= credit.partner_credit:
+                    record._notify_email_overdrawn_partner_credit()
                     raise ValidationError(_('the amount total of partner SOs is less than the customer limit :%s , in the comapny %s ') %(str(credit.partner_credit) ,credit.company_id.name))
         return super(SaleOrder, self)._action_confirm()

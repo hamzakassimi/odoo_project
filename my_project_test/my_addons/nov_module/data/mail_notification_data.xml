@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+          <record id="email_template_overdrawn_partner_credit" model="mail.template">
+                <field name="name">Overdrawn Partner Credit - Send by Email</field>
+                <field name="email_from">${(object.user_id.email and '%s &lt;%s&gt;' % (object.user_id.name, object.user_id.email) or '')|safe}</field>
+                <field name="subject">Overdrawn Partner Credit/${object.name}</field>
+                <field name="partner_to">${object.partner_id.id}</field>
+                <field name="model_id" ref="sale.model_sale_order"/>
+                <field name="auto_delete" eval="True"/>
+                <field name="report_name"> Overdrawn Partner Credit</field>
+                <field name="lang">${object.partner_id.lang}</field>
+                <field name="body_html"><![CDATA[
+                        Overdrawn Partner Credit for the order ${object.name}
+                ]]>
+                </field>
+          </record>
+    </data>
+</odoo>

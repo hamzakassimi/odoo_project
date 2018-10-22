@@ -23,6 +23,8 @@
 
     # always loaded
     'data': [
+        'data/mail_notification_data.xml',
+
         'security/ir.model.access.csv',
         'views/partner/res_partner_views.xml',
     ],
