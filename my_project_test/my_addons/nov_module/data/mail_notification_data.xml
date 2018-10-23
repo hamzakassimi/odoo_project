@@ -10,7 +10,7 @@
                 <field name="model_id" ref="sale.model_sale_order"/>
                 <field name="auto_delete" eval="True"/>
                 <field name="report_name"> Overdrawn Partner Credit</field>
-                <field name="lang">${object.partner_id.lang}</field>
+                <field name="lang">${object.user_id.lang}</field>
                 <field name="body_html"><![CDATA[
                         Overdrawn Partner Credit for the order ${object.name}
                 ]]>
