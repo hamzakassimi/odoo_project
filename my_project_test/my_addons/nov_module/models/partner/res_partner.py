@@ -36,10 +36,11 @@ class ResPartner(models.Model):
         selection='get_selection_state'
     )
 
-    limit_customer = fields.Float(
-        string='Limit Customer',
-        required = True,
-        default = 0.0
+    partner_credits_ids = fields.One2many(
+        string='Partner Credits',
+        required=True,
+        comodel_name='res.partner.credit',
+        inverse_name='partner_id',
     )
 
 

@@ -23,7 +23,9 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'data/mail_notification_data.xml',
+
+        'security/ir.model.access.csv',
         'views/partner/res_partner_views.xml',
     ],
     # only loaded in demonstration mode
