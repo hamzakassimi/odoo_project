@@ -54,9 +54,9 @@ class SaleOrder(models.Model):
             amounts = totals_amount + record.amount_total
             total_deduced = amounts - total_invoices
             for credit in record.partner_id.partner_credits_ids:
-                if total_deduced <= credit.partner_credit:
+                if total_deduced >= credit.partner_credit:
                     record._notify_email_overdrawn_partner_credit()
-                    raise ValidationError(_('the amount total of partner SOs is less than the customer limit :%s , in the comapny %s ') %(str(credit.partner_credit) ,credit.company_id.name))
+                    raise ValidationError(_('the amount total of partner SOs is great than the customer limit :%s , in the comapny %s ') %(str(credit.partner_credit) ,credit.company_id.name))
             for line in record.order_line:
                 if line.discount != 0.0:
                     raise ValidationError(_('You can not confirm so with discount you should first ask for validation  from sale manager'))
