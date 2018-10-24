@@ -95,52 +95,10 @@ class ResPartner(models.Model):
             elif record.child_ids:
                 for child in record.child_ids:
                     if child.type=='contact':
-                        if not child.compte:
-                            raise ValidationError(_('no compte specified for the contact : %s')  % (child.name))
-                        elif not child.email:
+                        if not child.email:
                             raise ValidationError(_('no email specified for the contact : %s')  % (child.name))
                         elif not child.phone:
                             raise ValidationError(_('no phone specified for the contact : %s')  % (child.name))
-                        elif not child.ice:
-                            raise ValidationError(_('no ICE specified for the contact : %s')  % (child.name))
-                        elif not child.rc:
-                            raise ValidationError(_('no RC specified for the contact : %s')  % (child.name))
-                        elif not child.cnss:
-                            raise ValidationError(_('no CNSS specified for the contact : %s')  % (child.name))
-                    elif child.type=='invoice':
-                        if not child.compte:
-                            raise ValidationError(_('no compte specified for the contact : %s')  % (child.name))
-                        elif not child.email:
-                            raise ValidationError(_('no email specified for the contact : %s')  % (child.name))
-                        elif not child.phone:
-                            raise ValidationError(_('no phone specified for the contact : %s')  % (child.name))
-                        elif not child.ice:
-                            raise ValidationError(_('no ICE specified for the contact : %s')  % (child.name))
-                        elif not child.rc:
-                            raise ValidationError(_('no RC specified for the contact : %s')  % (child.name))
-                        elif not child.cnss:
-                            raise ValidationError(_('no CNSS specified for the contact : %s')  % (child.name))
-                        elif not child.street and \
-                         not child.city and\
-                         not child.country_id:
-                            raise ValidationError(_('no adress specified for the contact : %s')  % (child.name))
-                    elif child.type=='delivery':
-                        if not child.compte:
-                            raise ValidationError(_('no compte specified for the contact : %s')  % (child.name))
-                        elif not child.email:
-                            raise ValidationError(_('no email specified for the contact : %s')  % (child.name))
-                        elif not child.phone:
-                            raise ValidationError(_('no phone specified for the contact : %s')  % (child.name))
-                        elif not child.ice:
-                            raise ValidationError(_('no ICE specified for the contact : %s')  % (child.name))
-                        elif not child.rc:
-                            raise ValidationError(_('no RC specified for the contact : %s')  % (child.name))
-                        elif not child.cnss:
-                            raise ValidationError(_('no CNSS specified for the contact : %s')  % (child.name))
-                        elif not child.street and \
-                         not child.city and\
-                         not child.country_id:
-                            raise ValidationError(_('no adress specified for the contact : %s')  % (child.name))
                     record.write({'state':'validated'})
             else:
                 record.write({'state':'validated'})

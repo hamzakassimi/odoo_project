@@ -33,13 +33,6 @@
                         </field>
                     </page>
             	</xpath>
-
-            	<xpath expr="//notebook/page/field/form/sheet/group/group/field[@name='function']" position="after">
-            		<field name="compte"/>
-            		<field name="ice"/>
-            		<field name="rc"/>
-                    <field name="cnss"/>
-            	</xpath>
             </field>
         </record>
     </data>
