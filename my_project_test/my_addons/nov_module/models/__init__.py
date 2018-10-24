@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from . import partner
+from . import base
 from . import sale
 from . import stock

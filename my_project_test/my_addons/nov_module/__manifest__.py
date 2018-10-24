@@ -30,7 +30,7 @@
         'security/ir.model.access.csv',
 
         #views
-        'views/partner/res_partner_views.xml',
+        'views/base/res_partner_views.xml',
         'views/stock/stock_warehouse_views.xml',
         'views/sale/sale_order_views.xml',
     ],
