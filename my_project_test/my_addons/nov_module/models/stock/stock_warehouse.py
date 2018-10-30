@@ -16,10 +16,10 @@ class StockWarehouse(models.Model):
 
     supplier_id = fields.Many2one(
         string='Supplier',
+        required=True,
         comodel_name='res.partner',
         domain=[('supplier','=',True)],
     )
-
     flag = fields.Boolean(
         string='Flag',
     )
