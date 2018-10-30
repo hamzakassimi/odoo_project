@@ -9,7 +9,6 @@
             <field name="arch" type="xml">
             	<field name="code" position="after">
             		<field name="supplier_id"/>
-                    <field name="flag"/>
             	</field>
             </field>
         </record>
