@@ -20,3 +20,6 @@ class StockWarehouse(models.Model):
         comodel_name='res.partner',
         domain=[('supplier','=',True)],
     )
+    flag = fields.Boolean(
+        string='Flag',
+    )
