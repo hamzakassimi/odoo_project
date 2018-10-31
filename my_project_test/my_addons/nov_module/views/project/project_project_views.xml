@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- inherit project form view -->
+        <record id="view_project_project_form_inherit" model="ir.ui.view">
+            <field name="name">project.project.form.inherit</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+            	<field name="partner_id" position="after">
+            		<field name="warehouse_id" options="{'no_create': True}"/>
+                    <field name="pricelist_id"/>
+            	</field>
+
+                <xpath expr="//notebook/page[@name='emails']" position="after">
+                    <page name="clients" string="Related Clients">
+                        <group>
+                            <field name="customer_ids" widget="one2many_list"/>
+                        </group>
+                    </page>   
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

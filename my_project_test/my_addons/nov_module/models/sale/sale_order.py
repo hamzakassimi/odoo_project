@@ -13,11 +13,37 @@ class SaleOrder(models.Model):
     # FIELDS
     # ------------------------------------------------------------------------
 
+    project_id = fields.Many2one(
+        string='Project',
+        comodel_name='project.project',
+    )
+
+    warehouse_id = fields.Many2one(
+        string='Warehouse',
+        required=True,
+        comodel_name='stock.warehouse',
+        related='project_id.warehouse_id'
+    )
+
+    pricelist_id = fields.Many2one(
+        string='Pricelist',
+        required=True,
+        comodel_name='product.pricelist',
+        related='project_id.pricelist_id'
+    )
 
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------
     
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id_project_id(self):
+        if self.project_id:
+            if self.project_id.customer_ids:
+                if not self.partner_id in self.project_id.customer_ids:
+                    raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
+
     @api.multi
     def _notify_email_overdrawn_partner_credit(self):
         for record in self:

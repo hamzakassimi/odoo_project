@@ -7,6 +7,14 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+                <!-- SO Form View -->
+                <field name="payment_term_id" postion="after">
+                    <field name="project_id"/>
+                </field>
+            
+                <field name="pricelist_id" position="replace">
+                    <field name="pricelist_id"/>
+                </field>
 				<!-- SOL form view -->
                 <xpath expr="//field[@name='order_line']/form/group/group/label[@for='analytic_tag_ids']" position="before">
                     <label for="warehouse_quantities" />
@@ -14,6 +22,17 @@
                         <field name="warehouse_quantities" />
                     </div>
                 </xpath>
+            </field>
+        </record>
+
+        <record id="view_sale_stock_form_inherit" model="ir.ui.view">
+            <field name="name">sale.stock..form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name="arch" type="xml">
+                <field name="warehouse_id" position="replace">
+                    <field name="warehouse_id" options="{'no_create': True}" groups="stock.group_stock_multi_locations"/>
+                </field>
             </field>
         </record>
     </data>

@@ -43,6 +43,11 @@ class ResPartner(models.Model):
         inverse_name='partner_id',
     )
 
+    project_id = fields.Many2one(
+        string='Project',
+        comodel_name='project.project',
+    )
+
 
     # ------------------------------------------------------------------------
     # CONSTRAINTS
