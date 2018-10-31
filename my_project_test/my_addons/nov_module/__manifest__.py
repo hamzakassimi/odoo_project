@@ -19,7 +19,15 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','crm','sale_management',],
+    'depends': [
+        'base',
+        'crm',
+        'sale',
+        'sale_stock',
+        'sale_management',
+        'stock_mts_mto_rule',
+        'project',
+    ],
 
     # always loaded
     'data': [
@@ -33,6 +41,7 @@
         'views/base/res_partner_views.xml',
         'views/stock/stock_warehouse_views.xml',
         'views/sale/sale_order_views.xml',
+        'views/project/project_project_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
