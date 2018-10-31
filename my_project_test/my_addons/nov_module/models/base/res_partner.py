@@ -18,15 +18,15 @@ class ResPartner(models.Model):
         selection='get_selection_compte'
     )
 
-    ice = fields.Char(
+    ice = fields.Integer(
         string='ICE',
     )
 
-    rc = fields.Char(
+    rc = fields.Integer(
         string='RC',
     )
 
-    cnss = fields.Char(
+    cnss = fields.Integer(
         string='CNSS',
     )
 
@@ -59,6 +59,7 @@ class ResPartner(models.Model):
     _sql_constraints = [
         ('ice', 'UNIQUE(ice)', 'ICE must be unique!'),
         ('rc', 'UNIQUE(rc)', 'RC must be unique!'),
+        ('cnss', 'UNIQUE(cnss)', 'CNSS must be unique!'),
     ]
 
     # ------------------------------------------------------------------------

@@ -9,8 +9,8 @@
             <field name="arch" type="xml">
             	<xpath expr="//sheet" position="before">
 	            	<header>
-                        <button name="button_validate_partner" string="Validate" type="object" class="btn-primary" attrs="{'invisible': ['|',('supplier', '=', True),('state','=','validated')]}"/>
-	            		<field name="state"  widget="statusbar" statusbar_visible="no_validated,validated" attrs="{'invisible': [('supplier', '=', True)]}"/>
+                        <button name="button_validate_partner" string="Validate" type="object" class="btn-primary" attrs="{'invisible': ['|',('customer', '=', False),('state','=','validated')]}"/>
+	            		<field name="state"  widget="statusbar" statusbar_visible="no_validated,validated" attrs="{'invisible': [('customer', '=', False)]}"/>
 	            	</header>
 	            </xpath>
             	<xpath expr="//page[@name='sales_purchases']" position="after">
