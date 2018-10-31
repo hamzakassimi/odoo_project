@@ -23,9 +23,11 @@ class ProjectProject(models.Model):
         comodel_name='product.pricelist',
     )
 
-    customer_ids = field_name = fields.One2many(
-        string='Related Customers',
+    customer_ids = fields.Many2many(
+        string='Customers',
         comodel_name='res.partner',
-        inverse_name='project_id',
-        domain=[('customer','=',True)],
+        relation='res_partner_project_rel',
+        column1='project_id',
+        column2='parent_id',
+        domain=[('customer','=',True), ]
     )
