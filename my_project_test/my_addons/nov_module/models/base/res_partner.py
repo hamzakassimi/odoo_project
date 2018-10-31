@@ -43,9 +43,12 @@ class ResPartner(models.Model):
         inverse_name='partner_id',
     )
 
-    project_id = fields.Many2one(
-        string='Project',
+    project_ids = fields.Many2many(
+        string='Projects',
         comodel_name='project.project',
+        relation='res_partner_project_rel',
+        column1='parent_id',
+        column2='project_id',
     )
 
 
