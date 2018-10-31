@@ -36,13 +36,13 @@ class SaleOrder(models.Model):
     # METHODS
     # ------------------------------------------------------------------------
     
-    @api.multi
-    @api.onchange('partner_id')
-    def onchange_partner_id_project_id(self):
-        if self.project_id:
-            if self.project_id.customer_ids:
-                if not self.partner_id in self.project_id.customer_ids:
-                    raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
+    # @api.multi
+    # @api.onchange('partner_id')
+    # def onchange_partner_id_project_id(self):
+    #     if self.project_id:
+    #         if self.project_id.customer_ids:
+    #             if not self.partner_id in self.project_id.customer_ids:
+    #                 raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
 
     @api.multi
     def _notify_email_overdrawn_partner_credit(self):
@@ -87,3 +87,21 @@ class SaleOrder(models.Model):
                 if line.discount != 0.0:
                     raise ValidationError(_('You can not confirm so with discount you should first ask for validation  from sale manager'))
         return super(SaleOrder, self)._action_confirm()
+
+    @api.model
+    def create(self, vals):
+        result = super(SaleOrder, self).create(vals)
+        if result.project_id:
+            if result.project_id.customer_ids:
+                if not result.partner_id in result.project_id.customer_ids:
+                    raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
+        return result
+
+    @api.multi
+    def write(self,vals):
+        res = super(SaleOrder, self).write(vals)
+        if self.project_id:
+            if self.project_id.customer_ids:
+                if not self.partner_id in self.project_id.customer_ids:
+                    raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
+        return res
