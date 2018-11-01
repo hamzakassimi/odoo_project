@@ -22,19 +22,42 @@ class SaleOrder(models.Model):
         string='Warehouse',
         required=True,
         comodel_name='stock.warehouse',
-        related='project_id.warehouse_id'
     )
 
     pricelist_id = fields.Many2one(
         string='Pricelist',
         required=True,
         comodel_name='product.pricelist',
-        related='project_id.pricelist_id'
     )
 
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------
+
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id_product(self):
+        res = {}
+        sale_orders = self.env['sale.order'].search([('partner_id','=',self.partner_id.id)])
+        product = ''
+        if sale_orders:
+            for line in sale_orders[0].order_line:
+                product += '\n' + line.product_id.name
+            msg = _("Those are the last products bought by this customer :" + product)
+            res['warning'] = {
+                'title': _("Customer Products Reminder!"),
+                'message': msg,
+            }
+        return res
+
+    @api.multi
+    @api.onchange('project_id')
+    def onchange_project_id(self):
+        if self.project_id:
+            if self.project_id.pricelist_id.id:
+                self.pricelist_id = self.project_id.pricelist_id.id
+            if self.project_id.warehouse_id:
+                self.warehouse_id = self.project_id.warehouse_id
     
     @api.multi
     def _notify_email_overdrawn_partner_credit(self):
