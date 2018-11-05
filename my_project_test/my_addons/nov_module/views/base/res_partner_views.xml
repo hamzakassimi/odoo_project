@@ -27,7 +27,7 @@
                         <field name="partner_credits_ids" widget="one2many_list">
                             <tree editable="bottom">
                                 <field name="partner_id" invisible="1"/>
-                                <field name="partner_credit"/>
+                                <field name="requested_client_limit"/>
                                 <field name="company_id"/>
                             </tree>
                         </field>
@@ -41,8 +41,23 @@
                             </tree>
                         </field>
                     </page>
-
             	</xpath>
+
+                <field name="email" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+            </field>
+        </record>
+        
+        <!-- form view inherited to make phone required filed -->
+        <record id="partner_form_send_sms_form_view_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form.send.sms.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="sms.partner_form_send_sms_form_view" />
+            <field name="arch" type="xml">
+                <field name="phone" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
             </field>
         </record>
     </data>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    	<!-- partner credit  form view -->
+        <record id="view_res_partner_credit_form" model="ir.ui.view">
+            <field name="name">res.partner.credit.form</field>
+            <field name="model">res.partner.credit</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+            	<header>
+                    <button name="button_validate_partner_credit" string="Validate" type="object" class="btn-primary" attrs="{'invisible': [('state','=','validated')]}" groups="nov_module.group_partner_credit_validation"/>
+	            	<field name="state"  widget="statusbar" statusbar_visible="draft,validated"/>
+	            </header>
+            	<group>
+                    <group>
+                        <field name="name"/>
+                        <field name="partner_id" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                        <field name="requested_client_limit" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                        <field name="ca_client" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                    </group>
+                    <group>
+                        <field name="company_id" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                        <field name="reason" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                    </group>
+                </group>
+            </field>
+        </record>
+
+        <!-- partner credit  tree view -->
+        <record id="view_res_partner_credit_tree" model="ir.ui.view">
+            <field name="name">res.partner.credit.tree</field>
+            <field name="model">res.partner.credit</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <field name="name"/>
+            	<field name="partner_id"/>
+                <field name="requested_client_limit"/>
+                <field name="ca_client"/>
+                <field name="reason"/>
+                <field name="state"/>
+            </field>
+        </record>
+        
+        <!--partner credit action --> 
+        <record id="action_partner_credit_form" model="ir.actions.act_window">
+            <field name="name">Partners Credits</field>
+            <field name="res_model">res.partner.credit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="action_partner_credit_form" id="menu_action_partner_credit_form" parent="contacts.res_partner_menu_config" sequence="2"/>
+    </data>
+</odoo>

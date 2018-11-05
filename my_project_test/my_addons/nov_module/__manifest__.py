@@ -33,12 +33,15 @@
     'data': [
         #data
         'data/mail_notification_data.xml',
+        'data/ir_sequence.xml',
 
         #security
         'security/ir.model.access.csv',
+        'security/security.xml',
 
         #views
         'views/base/res_partner_views.xml',
+        'views/base/res_partner_credit_views.xml',
         'views/stock/stock_warehouse_views.xml',
         'views/sale/sale_order_views.xml',
         'views/project/project_project_views.xml',

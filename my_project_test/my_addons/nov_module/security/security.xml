@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<!-- Group for partner limit validation --> 
+    	<record id="group_partner_credit_validation" model="res.groups">
+            <field name="name">Partner Credit Validation</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+    </data>
+</odoo>
