@@ -26,6 +26,7 @@
                     <page name="partner_limits" string="Partner Limits">
                         <field name="partner_credits_ids" widget="one2many_list">
                             <tree editable="bottom">
+                                <field name="name"/>
                                 <field name="partner_id" invisible="1"/>
                                 <field name="requested_client_limit"/>
                                 <field name="company_id"/>

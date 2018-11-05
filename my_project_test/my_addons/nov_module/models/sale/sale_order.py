@@ -74,30 +74,36 @@ class SaleOrder(models.Model):
     @api.multi
     def _action_confirm(self):
         for record in self:
+            current_company = self.env['res.users'].sudo().browse(self._uid).company_id
             totals_amount = 0.0
             total_invoices = 0.0
+            compnies = []
+            related_partner_credit = self.env['res.partner.credit'].search([('partner_id','=',record.partner_id.id),('company_id','=',current_company.id)],limit=1)
             related_sales = self.env['sale.order'].search([('partner_id','=',record.partner_id.id),('state','=','sale')])
             if record.partner_id.state != 'validated':
                 raise ValidationError(_('you can not confirm a sale order for non validated customer'))
-            if related_sales:
-                for order in related_sales:
-                    totals_amount += order.amount_total
-                    if order.invoice_ids:
-                        for invoice in order.invoice_ids:
-                            if invoice.state=='paid':
-                                total_invoices += invoice.amount_total
-                            else:
-                                total_invoices = 0.0
-                    else:
-                        total_invoices = 0.0
-            else:
-                totals_amount = 0.0
-            amounts = totals_amount + record.amount_total
-            total_deduced = amounts - total_invoices
-            for credit in record.partner_id.partner_credits_ids:
-                if total_deduced >= credit.partner_credit:
-                    record._notify_email_overdrawn_partner_credit()
-                    raise ValidationError(_('the amount total of partner SOs is great than the customer limit :%s , in the comapny %s ') %(str(credit.partner_credit) ,credit.company_id.name))
+            if record.partner_id.compte=='au_compte':
+                if related_sales:
+                    for order in related_sales:
+                        totals_amount += order.amount_total
+                        if order.invoice_ids:
+                            for invoice in order.invoice_ids:
+                                if invoice.state=='paid':
+                                    total_invoices += invoice.amount_total
+                                else:
+                                    total_invoices = 0.0
+                        else:
+                            total_invoices = 0.0
+                else:
+                    totals_amount = 0.0
+                amounts = totals_amount + record.amount_total
+                total_deduced = amounts - total_invoices
+                if not related_partner_credit:
+                    raise ValidationError(_('There is no partner credit for this customer in this company,please ask for partner credit !'))
+                for credit in record.partner_id.partner_credits_ids:
+                    if total_deduced >= credit.requested_client_limit:
+                        record._notify_email_overdrawn_partner_credit()
+                        raise ValidationError(_('the amount total of partner SOs is great than the customer limit :%s , in the comapny %s ') %(str(credit.requested_client_limit) ,credit.company_id.name))
             for line in record.order_line:
                 if line.discount != 0.0:
                     raise ValidationError(_('You can not confirm so with discount you should first ask for validation  from sale manager'))
