@@ -30,6 +30,11 @@ class SaleOrder(models.Model):
         comodel_name='product.pricelist',
     )
 
+    is_public = fields.Boolean(
+        string='Is Public',
+        default=False,
+    )
+
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------
@@ -104,25 +109,51 @@ class SaleOrder(models.Model):
                     if total_deduced >= credit.requested_client_limit:
                         record._notify_email_overdrawn_partner_credit()
                         raise ValidationError(_('the amount total of partner SOs is great than the customer limit :%s , in the comapny %s ') %(str(credit.requested_client_limit) ,credit.company_id.name))
-            for line in record.order_line:
-                if line.discount != 0.0:
-                    raise ValidationError(_('You can not confirm so with discount you should first ask for validation  from sale manager'))
         return super(SaleOrder, self)._action_confirm()
 
     @api.model
     def create(self, vals):
         result = super(SaleOrder, self).create(vals)
+        public_pricelist = self.env.ref('product.list0')
         if result.project_id:
             if result.project_id.customer_ids:
                 if not result.partner_id in result.project_id.customer_ids:
                     raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
+        if result.partner_id.state=='no_validated' and result.pricelist_id.id != public_pricelist.id:
+            result.is_public = True
+        for line in result.order_line:
+            if line.discount!=0.0:
+                result.is_public = True
         return result
 
     @api.multi
     def write(self,vals):
-        res = super(SaleOrder, self).write(vals)
+        public_pricelist = self.env.ref('product.list0')
         if self.project_id:
             if self.project_id.customer_ids:
                 if not self.partner_id in self.project_id.customer_ids:
                     raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
-        return res
+        if self.partner_id.state=='no_validated' and self.pricelist_id.id != public_pricelist.id:
+            vals.update({
+                'is_public': True
+            })
+        else:
+            vals.update({
+                'is_public': False
+            })
+        for line in self.order_line:
+            if line.discount != 0.0:
+                print('+++',line.discount)
+                vals.update({
+                    'is_public': True
+                })
+            else:
+                vals.update({
+                    'is_public': False
+                })
+        return super(SaleOrder, self).write(vals)
+
+    @api.multi
+    def button_validate(self):
+        for record in self:
+            record.write({'is_public':False})

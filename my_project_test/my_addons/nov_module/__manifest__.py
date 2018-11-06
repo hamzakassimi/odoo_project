@@ -24,6 +24,7 @@
         'crm',
         'sale',
         'sale_stock',
+        'purchase',
         'sale_management',
         'stock_mts_mto_rule',
         'project',
