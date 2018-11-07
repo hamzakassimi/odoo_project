@@ -128,32 +128,26 @@ class SaleOrder(models.Model):
 
     @api.multi
     def write(self,vals):
-        public_pricelist = self.env.ref('product.list0')
+        # public_pricelist = self.env.ref('product.list0')
+        #comented I need to find a fix for it cause it doesn"t work with the logic of button validate 
+        # for line in self.order_line:
+        #     if line.order_id.partner_id.state == 'no_validated' and \
+        #       line.order_id.pricelist_id.id != public_pricelist.id or \
+        #       line.discount != 0.0:
+        #         vals.update({
+        #             'is_public': True
+        #         })
+        #     else:
+        #         vals.update({
+        #             'is_public': False
+        #         })
+        res = super(SaleOrder, self).write(vals)
         if self.project_id:
             if self.project_id.customer_ids:
                 if not self.partner_id in self.project_id.customer_ids:
                     raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
-        if self.partner_id.state=='no_validated' and self.pricelist_id.id != public_pricelist.id:
-            vals.update({
-                'is_public': True
-            })
-        else:
-            vals.update({
-                'is_public': False
-            })
-        for line in self.order_line:
-            if line.discount != 0.0:
-                print('+++',line.discount)
-                vals.update({
-                    'is_public': True
-                })
-            else:
-                vals.update({
-                    'is_public': False
-                })
         return super(SaleOrder, self).write(vals)
 
     @api.multi
     def button_validate(self):
-        for record in self:
-            record.write({'is_public':False})
+        return self.write({'is_public': False})
