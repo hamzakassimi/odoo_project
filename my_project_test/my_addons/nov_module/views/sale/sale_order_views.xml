@@ -22,6 +22,27 @@
                         <field name="warehouse_quantities" />
                     </div>
                 </xpath>
+
+                <button name="action_confirm" position="after">
+                    <button name="button_validate" type="object" string="Validate" class="btn-primary" groups="nov_module.group_quotation_validation"/>
+                </button>
+
+                <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|',('is_public','=',True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_quotation_send'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible':['|',('is_public','=',True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
+                    <attribute name="attrs">{'invisible':['|',('is_public','=',True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='print_quotation'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible':['|',('is_public','=',True)]}</attribute>
+                </xpath>
+
             </field>
         </record>
 

@@ -8,21 +8,65 @@ _logger = logging.getLogger(__name__)
  
 class ResPartnerCredit(models.Model):
     _name = 'res.partner.credit'
+    _rec_name = 'name'
 
     # ------------------------------------------------------------------------
     # FIELDS
     # ------------------------------------------------------------------------
+ 
+    name = fields.Char(
+        string='Name',
+    )
 
     partner_id = fields.Many2one(
         comodel_name='res.partner',
-        string='Partner Id',
+        string='Client',
     )
 
-    partner_credit = fields.Float(
-        string='Partner Credit',
+    requested_client_limit = fields.Float(
+        string='Requested Client Limit',
     )
     
     company_id = fields.Many2one(
         comodel_name='res.company',
         string='Company Id',
     )
+
+    reason = fields.Text(
+        string='Reason Of Request',
+        translate=True
+    )
+
+    ca_client = fields.Float(
+        string='CA Client',
+    )
+
+    state = fields.Selection(
+        string='State',
+        default='draft',
+        selection='get_selection_state'
+    )
+
+    # ------------------------------------------------------------------------
+    # METHODS
+    # ------------------------------------------------------------------------
+
+    @api.model
+    def get_selection_state(self):
+        return [
+            ('draft', _('Draft')),
+            ('validated', _('Validated'))
+        ]
+
+    @api.multi
+    def button_validate_partner_credit(self):
+        for record in self:
+            record.write({'state':'validated'})
+
+    @api.model
+    def create(self, values):
+        seq = self.env['ir.sequence'].next_by_code('partner_credit_limit')
+        values.update({
+            'name': seq
+        })
+        return super(ResPartnerCredit, self).create(values)

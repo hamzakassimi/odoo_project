@@ -84,30 +84,35 @@ class ResPartner(models.Model):
     def button_validate_partner(self):
         for record in self:
             if not record.compte:
-                raise ValidationError(_('no compte specified for the client : %s')  % (record.name))
+                raise ValidationError(_('No compte specified for the client : %s')  % (record.name))
             elif not record.street and \
              not record.city and\
              not record.country_id:
-                raise ValidationError(_('no adress specified for the client : %s')  % (record.name))
-            elif not record.email:
-                raise ValidationError(_('no email specified for the client : %s')  % (record.name))
-            elif not record.phone:
-                raise ValidationError(_('no phone specified for the client : %s')  % (record.name))
-            elif not record.ice:
-                raise ValidationError(_('no ICE specified for the client : %s')  % (record.name))
-            elif not record.rc:
-                raise ValidationError(_('no RC specified for the client : %s')  % (record.name))
-            elif not record.cnss:
-                raise ValidationError(_('no CNSS specified for the client : %s')  % (record.name))
-            elif not record.category_id:
-                raise ValidationError(_('no tags specified for the client : %s')  % (record.name))
+                raise ValidationError(_('No address specified for the client : %s')  % (record.name))
+            elif record.compte=="au_compte":
+                if not record.ice:
+                    raise ValidationError(_('No ICE specified for the client : %s')  % (record.name))
+                elif not record.rc:
+                    raise ValidationError(_('No RC specified for the client : %s')  % (record.name))
+                elif not record.cnss:
+                    raise ValidationError(_('No CNSS specified for the client : %s')  % (record.name))
+                elif not record.category_id:
+                    raise ValidationError(_('No tags specified for the client : %s')  % (record.name))
+                elif record.child_ids:
+                    for child in record.child_ids:
+                        if child.type=='contact':
+                            if not child.email:
+                                raise ValidationError(_('No email specified for the contact : %s')  % (child.name))
+                            elif not child.phone:
+                                raise ValidationError(_('No phone specified for the contact : %s')  % (child.name))
+                        record.write({'state':'validated'})
             elif record.child_ids:
                 for child in record.child_ids:
                     if child.type=='contact':
                         if not child.email:
-                            raise ValidationError(_('no email specified for the contact : %s')  % (child.name))
+                            raise ValidationError(_('No email specified for the contact : %s')  % (child.name))
                         elif not child.phone:
-                            raise ValidationError(_('no phone specified for the contact : %s')  % (child.name))
+                            raise ValidationError(_('No phone specified for the contact : %s')  % (child.name))
                     record.write({'state':'validated'})
             else:
                 record.write({'state':'validated'})
