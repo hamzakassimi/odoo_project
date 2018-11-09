@@ -79,12 +79,9 @@ class SaleOrder(models.Model):
     @api.multi
     def _action_confirm(self):
         for record in self:
-            print('hhhhhh',record)
-            print('******',super(SaleOrder, self)._action_confirm())
             current_company = self.env['res.users'].sudo().browse(self._uid).company_id
             totals_amount = 0.0
             total_invoices = 0.0
-            compnies = []
             related_partner_credit = self.env['res.partner.credit'].search([('partner_id','=',record.partner_id.id),('company_id','=',current_company.id)],limit=1)
             related_sales = self.env['sale.order'].search([('partner_id','=',record.partner_id.id),('state','=','sale')])
             if record.partner_id.state != 'validated':
