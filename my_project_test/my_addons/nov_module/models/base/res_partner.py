@@ -106,6 +106,11 @@ class ResPartner(models.Model):
                             elif not child.phone:
                                 raise ValidationError(_('No phone specified for the contact : %s')  % (child.name))
                         record.write({'state':'validated'})
+                else:
+                    record.write({'state':'validated'})
+            elif record.compte=="au_comptant":
+                record.write({'state':'validated'})
+
             elif record.child_ids:
                 for child in record.child_ids:
                     if child.type=='contact':

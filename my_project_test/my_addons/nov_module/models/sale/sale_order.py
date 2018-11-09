@@ -82,7 +82,6 @@ class SaleOrder(models.Model):
             current_company = self.env['res.users'].sudo().browse(self._uid).company_id
             totals_amount = 0.0
             total_invoices = 0.0
-            compnies = []
             related_partner_credit = self.env['res.partner.credit'].search([('partner_id','=',record.partner_id.id),('company_id','=',current_company.id)],limit=1)
             related_sales = self.env['sale.order'].search([('partner_id','=',record.partner_id.id),('state','=','sale')])
             if record.partner_id.state != 'validated':
@@ -109,7 +108,7 @@ class SaleOrder(models.Model):
                     if total_deduced >= credit.requested_client_limit:
                         record._notify_email_overdrawn_partner_credit()
                         raise ValidationError(_('the amount total of partner SOs is great than the customer limit :%s , in the comapny %s ') %(str(credit.requested_client_limit) ,credit.company_id.name))
-        return super(SaleOrder, self)._action_confirm()
+            return super(SaleOrder, self)._action_confirm()
 
     @api.model
     def create(self, vals):
@@ -125,11 +124,12 @@ class SaleOrder(models.Model):
             if line.discount!=0.0:
                 result.is_public = True
         return result
-
-    @api.multi
-    def write(self,vals):
-        # public_pricelist = self.env.ref('product.list0')
-        #comented I need to find a fix for it cause it doesn"t work with the logic of button validate 
+    
+    #commented I need to fix later
+    # @api.multi
+    # def write(self,vals):
+    #     public_pricelist = self.env.ref('product.list0')
+        # comented I need to find a fix for it cause it doesn"t work with the logic of button validate 
         # for line in self.order_line:
         #     if line.order_id.partner_id.state == 'no_validated' and \
         #       line.order_id.pricelist_id.id != public_pricelist.id or \
@@ -141,12 +141,12 @@ class SaleOrder(models.Model):
         #         vals.update({
         #             'is_public': False
         #         })
-        res = super(SaleOrder, self).write(vals)
-        if self.project_id:
-            if self.project_id.customer_ids:
-                if not self.partner_id in self.project_id.customer_ids:
-                    raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
-        return super(SaleOrder, self).write(vals)
+        # res = super(SaleOrder, self).write(vals)
+        # if self.project_id:
+        #     if self.project_id.customer_ids:
+        #         if not self.partner_id in self.project_id.customer_ids:
+        #             raise ValidationError(_('This customer dont figure out in the list of customers of the your project!'))
+        # return super(SaleOrder, self).write(vals)
 
     @api.multi
     def button_validate(self):

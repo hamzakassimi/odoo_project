@@ -14,6 +14,7 @@
             
                 <field name="pricelist_id" position="replace">
                     <field name="pricelist_id"/>
+                    <field name="is_public"/>
                 </field>
 				<!-- SOL form view -->
                 <xpath expr="//field[@name='order_line']/form/group/group/label[@for='analytic_tag_ids']" position="before">
@@ -27,8 +28,12 @@
                     <button name="button_validate" type="object" string="Validate" class="btn-primary" groups="nov_module.group_quotation_validation"/>
                 </button>
 
+                <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|',('is_public','=',True),('state', 'not in', ['sent'])]}</attribute>
+                </xpath>
+
                 <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
-                    <attribute name="attrs">{'invisible': ['|',('is_public','=',True)]}</attribute>
+                    <attribute name="attrs">{'invisible': ['|',('is_public','=',True),('state', 'not in', ['draft'])]}</attribute>
                 </xpath>
 
                 <xpath expr="//button[@name='action_quotation_send'][1]" position="attributes">
@@ -36,12 +41,29 @@
                 </xpath>
 
                 <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
+                    <attribute name="attrs">{'invisible':['|',('is_public','=',True),('state', '!=', 'draft')]}</attribute>
+                </xpath>
+                
+                <xpath expr="//button[@name='action_quotation_send'][3]" position="attributes">
+                    <attribute name="attrs">{'invisible':['|',('is_public','=',True),('state', '=', 'draft')]}</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_quotation_send'][4]" position="attributes">
                     <attribute name="attrs">{'invisible':['|',('is_public','=',True)]}</attribute>
                 </xpath>
 
                 <xpath expr="//button[@name='print_quotation'][1]" position="attributes">
                     <attribute name="attrs">{'invisible':['|',('is_public','=',True)]}</attribute>
                 </xpath>
+
+                <xpath expr="//button[@name='print_quotation'][2]" position="attributes">
+                    <attribute name="attrs">{'invisible':['|',('is_public','=',True)]}</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_cancel']" position="attributes">
+                    <attribute name="attrs">{'invisible':['|',('is_public','=',True)]}</attribute>
+                </xpath>
+
 
             </field>
         </record>

@@ -32,3 +32,20 @@ class SaleOrderLine(models.Model):
                 if related_warehouse:
                     warehouse_quantities += 'Quantity' + ' : ' + str(quant.quantity) +  ' /' +'Warehouse' + ' : ' + related_warehouse.name + '\n'
                 record.warehouse_quantities = warehouse_quantities
+
+    @api.multi
+    def _check_package(self):
+        default_uom = self.product_id.uom_id
+        pack = self.product_packaging
+        qty = self.product_uom_qty
+        q = default_uom._compute_quantity(pack.qty, self.product_uom)
+        if qty and q and (qty % q):
+            newqty = qty - (qty % q) + q
+            self.product_uom_qty = newqty
+            return {
+                'warning': {
+                    'title': _('Warning'),
+                    'message': _("This product is packaged by %.2f %s. You should sell %.2f %s.") % (pack.qty, default_uom.name, newqty, self.product_uom.name),
+                },
+            }
+        return {}
