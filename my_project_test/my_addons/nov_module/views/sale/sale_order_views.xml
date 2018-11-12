@@ -24,6 +24,16 @@
                     </div>
                 </xpath>
 
+                <xpath expr="//field[@name='order_line']/form/div/field[@name='invoice_lines']" position="before">
+                    <field name="line_supplier_ids">
+                        <tree editable="bottom">
+                            <field name="line_id" invisible="1"/>
+                            <field name="supplier_id"/>
+                            <field name="qty"/>
+                        </tree>
+                    </field>
+                </xpath>
+
                 <button name="action_confirm" position="after">
                     <button name="button_validate" type="object" string="Validate" class="btn-primary" groups="nov_module.group_quotation_validation"/>
                 </button>

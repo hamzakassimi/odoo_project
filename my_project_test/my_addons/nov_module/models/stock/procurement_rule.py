@@ -15,8 +15,9 @@ class ProcurementRule(models.Model):
             selection of supplier.
         """
         warehouse_supplier = values['warehouse_id']['supplier_id']
-        for supplier in suppliers:
-            if supplier.name.id == warehouse_supplier.id and values['warehouse_id']['flag'] == True:
-                return supplier
-            else:
-                raise UserError(_('The vendor associated to your warehouse is not configured in vendors of  your products ,Please define it for your products.'))
+        product_supplier = self.env['product.supplierinfo'].search([('name','=',warehouse_supplier.id)],limit=1)
+        if product_supplier:
+            if values['warehouse_id']['flag'] == True:
+                return product_supplier
+        else:
+            return suppliers[0]

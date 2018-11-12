@@ -19,6 +19,12 @@ class SaleOrderLine(models.Model):
         compute='compute_warehouse_quantities'
     )
 
+    line_supplier_ids = fields.One2many(
+        string='Line Suppliers',
+        comodel_name='sale.order.line.supplier',
+        inverse_name='line_id',
+    )
+
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------

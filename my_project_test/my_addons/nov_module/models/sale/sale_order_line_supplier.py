@@ -7,19 +7,21 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class StockWarehouse(models.Model):
-    _inherit = 'stock.warehouse'
+class SaleOrderLineSupplier(models.Model):
+    _name = 'sale.order.line.supplier'
+    _rec_name = 'supplier_id'
 
-    # ------------------------------------------------------------------------
-    # FIELDS
-    # ------------------------------------------------------------------------
+    line_id = fields.Many2one(
+        string='Order Line',
+        comodel_name='sale.order.line',
+    )
 
     supplier_id = fields.Many2one(
         string='Supplier',
         comodel_name='res.partner',
         domain=[('supplier','=',True)],
     )
-    
-    flag = fields.Boolean(
-        string='Flag',
+
+    qty = fields.Float(
+        string='Quantity',
     )
