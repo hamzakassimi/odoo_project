@@ -46,6 +46,7 @@
         'views/stock/stock_warehouse_views.xml',
         'views/sale/sale_order_views.xml',
         'views/project/project_project_views.xml',
+        'views/product/product_template_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
