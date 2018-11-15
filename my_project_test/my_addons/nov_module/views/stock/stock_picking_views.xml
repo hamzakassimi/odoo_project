@@ -16,6 +16,7 @@
                         </div>
                     </div>
             	</field>
+
                 <xpath expr="//notebook/page[2]/field/tree/field[@name='product_uom_qty']" position="after">
                     <field name="is_good" invisible="1"/>
                     <field name="quantity_to_be_prepared" attrs="{'readonly': [('is_good', '=', True)]}"/>
@@ -27,10 +28,10 @@
                 </field>
 
                 <button name="do_print_picking" position="before">
-                    <button name="button_load_goods" string="Goods For Loading" type="object" class="btn-primary" attrs="{'invisible': 
+                    <button name="button_load_goods" string="Goods For Loading" type="object" class="btn-primary" 
+                        attrs="{'invisible': 
                         ['|',
-                        ('additional_state','!=','waiting'),
-                        ('state','!=','assigned'),
+                        ('additional_state','in',('good_for_loading','ready','good_on_move','at_the_carrier','received_by_client')),
                         ('picking_type_code','!=','outgoing')]}"
                     />
                     <button 
@@ -41,7 +42,6 @@
                         attrs="{'invisible': 
                         ['|',
                         ('additional_state','!=','good_for_loading'),
-                        ('state','!=','assigned'),
                         ('picking_type_code','!=','outgoing')]}"
                     />
 
@@ -50,11 +50,9 @@
                         string="Goods On Move" type="object" 
                         class="btn-primary" 
                         attrs="{'invisible': 
-                        ['|',
-                        ('additional_state','!=','ready'),
-                        ('state','!=','assigned'),
-                        ('picking_type_code','!=','outgoing'),(
-                        'carrier_type','!=','by_our_self')]}"
+                        ['|',('additional_state','in',('waiting','good_for_loading','good_on_move','at_the_carrier','received_by_client')),'|',
+                        ('picking_type_code','!=','outgoing'),
+                        ('carrier_type', 'in',(False,'by_carrier','client'))]}"
                     />
 
                     <button name="button_at_the_carrier" 
@@ -62,11 +60,9 @@
                         type="object" 
                         class="btn-primary" 
                         attrs="{'invisible': 
-                        ['|',
-                        ('additional_state','!=','ready'),
-                        ('state','!=','assigned'),
-                        ('picking_type_code','!=','outgoing'),(
-                        'carrier_type','!=','by_carrier')]}"
+                        ['|',('additional_state','in',('waiting','good_for_loading','good_on_move','at_the_carrier','received_by_client')),'|',
+                        ('picking_type_code','!=','outgoing'),
+                        ('carrier_type', 'in',(False,'by_our_self','client'))]}"
                     />
 
                     <button 
@@ -74,14 +70,19 @@
                         string="Goods Recieved By Client" 
                         type="object" 
                         class="btn-primary" 
-                        attrs="{'invisible': 
-                        ['|',
-                        ('additional_state','!=','ready'),
-                        ('state','!=','assigned'),
-                        ('picking_type_code','!=','outgoing'),(
-                        'carrier_type','!=','client')]}"
+                        attrs="{'invisible':
+                        ['|',('additional_state','in',('waiting','good_for_loading','good_on_move','at_the_carrier','received_by_client')),'|',
+                        ('picking_type_code', '!=','outgoing'),
+                        ('carrier_type', 'in',(False,'by_our_self','by_carrier'))]}"
                     />
                 </button>
+
+               <xpath expr="//button[@name='button_validate']" position="attributes">
+                    <attribute name="attrs">{'invisible': 
+                        ['|',('show_validate', '=', False),
+                        ('additional_state','in',('waiting','good_for_loading','good_on_move','at_the_carrier','ready'))
+                        ]}</attribute>
+                </xpath>
 
             </field>
         </record>
