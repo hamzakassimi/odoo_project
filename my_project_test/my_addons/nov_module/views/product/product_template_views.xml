@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- inherit product form view -->
+        <record id="view_template_form_inherit" model="ir.ui.view">
+            <field name="name">product.template.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+            	<field name="barcode" position="after">
+            		<strong>Caracteristiques</strong>
+            		<group>
+            			<field name="manufacturer"/>
+            			<field name="serie"/>
+            			<field name="Model"/>
+            			<field name="specific"/>
+            		</group>
+            	</field>
+            </field>
+        </record>
+    </data>
+</odoo>

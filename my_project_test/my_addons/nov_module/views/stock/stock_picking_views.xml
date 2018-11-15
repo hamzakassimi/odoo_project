@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- inherit stock picking form view -->
+        <record id="view_stock_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.form.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+            	<field name="name" position="before">
+                    <div class="row">
+                        <div class="col-xs-12" style="text-align:right">
+                		    <field name="additional_state" widget="statusbar" statusbar_visible="waiting,good_for_loading,ready,good_on_move,at_the_carrier,received_by_client" attrs="{'invisible': ['|',
+                                ('state','!=','assigned'),
+                                ('picking_type_code', '!=', 'outgoing')]}"/>
+                        </div>
+                    </div>
+            	</field>
+                <xpath expr="//notebook/page[2]/field/tree/field[@name='product_uom_qty']" position="after">
+                    <field name="is_good" invisible="1"/>
+                    <field name="quantity_to_be_prepared" attrs="{'readonly': [('is_good', '=', True)]}"/>
+                </xpath>
+                <field name="owner_id" position="after">
+                    <field name="carrier_type" attrs="{'readonly': [('additional_state', '=', 'good_for_loading')]}"/>
+                    <field name="warehouse_man"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
+                    <field name="charger"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
+                </field>
+
+                <button name="do_print_picking" position="before">
+                    <button name="button_load_goods" string="Goods For Loading" type="object" class="btn-primary" attrs="{'invisible': 
+                        ['|',
+                        ('additional_state','!=','waiting'),
+                        ('state','!=','assigned'),
+                        ('picking_type_code','!=','outgoing')]}"
+                    />
+                    <button 
+                        name="button_ready" 
+                        string="Goods Ready" 
+                        type="object" 
+                        class="btn-primary" 
+                        attrs="{'invisible': 
+                        ['|',
+                        ('additional_state','!=','good_for_loading'),
+                        ('state','!=','assigned'),
+                        ('picking_type_code','!=','outgoing')]}"
+                    />
+
+                    <button 
+                        name="button_good_on_move" 
+                        string="Goods On Move" type="object" 
+                        class="btn-primary" 
+                        attrs="{'invisible': 
+                        ['|',
+                        ('additional_state','!=','ready'),
+                        ('state','!=','assigned'),
+                        ('picking_type_code','!=','outgoing'),(
+                        'carrier_type','!=','by_our_self')]}"
+                    />
+
+                    <button name="button_at_the_carrier" 
+                        string="Goods At Carrier" 
+                        type="object" 
+                        class="btn-primary" 
+                        attrs="{'invisible': 
+                        ['|',
+                        ('additional_state','!=','ready'),
+                        ('state','!=','assigned'),
+                        ('picking_type_code','!=','outgoing'),(
+                        'carrier_type','!=','by_carrier')]}"
+                    />
+
+                    <button 
+                        name="button_received_by_client" 
+                        string="Goods Recieved By Client" 
+                        type="object" 
+                        class="btn-primary" 
+                        attrs="{'invisible': 
+                        ['|',
+                        ('additional_state','!=','ready'),
+                        ('state','!=','assigned'),
+                        ('picking_type_code','!=','outgoing'),(
+                        'carrier_type','!=','client')]}"
+                    />
+                </button>
+
+            </field>
+        </record>
+    </data>
+</odoo>
