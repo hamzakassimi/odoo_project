@@ -28,6 +28,8 @@
         'sale_management',
         'stock_mts_mto_rule',
         'project',
+        'stock',
+        'hr',
     ],
 
     # always loaded
@@ -44,6 +46,7 @@
         'views/base/res_partner_views.xml',
         'views/base/res_partner_credit_views.xml',
         'views/stock/stock_warehouse_views.xml',
+        'views/stock/stock_picking_views.xml',
         'views/sale/sale_order_views.xml',
         'views/project/project_project_views.xml',
         'views/product/product_template_views.xml',
