@@ -22,7 +22,7 @@ class StockPicking(models.Model):
 
     carrier_type = fields.Selection(
         string='Carrier Type',
-        selection='get_selection_carrier_type'
+        selection='get_selection_carrier_type',
     )
 
     warehouse_man = fields.Many2one(
