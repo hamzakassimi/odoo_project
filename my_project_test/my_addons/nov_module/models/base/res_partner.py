@@ -41,6 +41,7 @@ class ResPartner(models.Model):
         required=True,
         comodel_name='res.partner.credit',
         inverse_name='partner_id',
+        domain=[('state','=','validated')]
     )
 
     project_ids = fields.Many2many(

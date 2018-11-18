@@ -34,6 +34,7 @@
             <field name="arch" type="xml">
                 <field name="name"/>
             	<field name="partner_id"/>
+                <field name="company_id"/>
                 <field name="requested_client_limit"/>
                 <field name="ca_client"/>
                 <field name="reason"/>
