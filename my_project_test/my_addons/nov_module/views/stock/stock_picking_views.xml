@@ -71,9 +71,8 @@
                         type="object" 
                         class="btn-primary" 
                         attrs="{'invisible':
-                        ['|',('additional_state','in',('waiting','good_for_loading','good_on_move','at_the_carrier','received_by_client')),'|',
-                        ('picking_type_code', '!=','outgoing'),
-                        ('carrier_type', 'in',(False,'by_our_self','by_carrier'))]}"
+                        ['|',('additional_state','in',('waiting','good_for_loading','received_by_client')),'|',
+                        ('picking_type_code', '!=','outgoing')]}"
                     />
                 </button>
 

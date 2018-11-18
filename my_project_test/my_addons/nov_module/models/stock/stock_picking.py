@@ -71,10 +71,10 @@ class StockPicking(models.Model):
     def button_ready(self):
         for record in self:
             for move in record.move_lines:
-                if move.quantity_done !=0.0 and move.quantity_done==move.quantity_to_be_prepared:
+                if move.quantity_done==move.quantity_to_be_prepared:
                     return self.write({'additional_state':'ready'})
                 else:
-                    raise ValidationError(_('you can not process ready button  if quantity done is not great than  0 or equal to quantity to be prepared'))
+                    raise ValidationError(_('you can not process ready button  if quantity done is not equal to quantity to be prepared'))
     
     @api.multi
     def button_good_on_move(self):
