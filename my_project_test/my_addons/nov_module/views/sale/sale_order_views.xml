@@ -8,13 +8,12 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <!-- SO Form View -->
-                <field name="payment_term_id" postion="after">
+                <xpath expr="//group/group/field[@name='partner_id']" position="after">
                     <field name="project_id"/>
-                </field>
-            
+                </xpath>            
                 <field name="pricelist_id" position="replace">
                     <field name="pricelist_id"/>
-                    <field name="is_public"/>
+                    <field name="is_public" invisible="True"/>
                 </field>
 				<!-- SOL form view -->
                 <xpath expr="//field[@name='order_line']/form/group/group/label[@for='analytic_tag_ids']" position="before">
@@ -35,7 +34,7 @@
                 </xpath>
 
                 <button name="action_confirm" position="after">
-                    <button name="button_validate" type="object" string="Validate" class="btn-primary" groups="nov_module.group_quotation_validation"/>
+                    <button name="button_validate" type="object" string="Validate" class="btn-primary" groups="nov_module.group_quotation_validation" attrs="{'invisible': [('is_public', '=', False)]}"/>
                 </button>
 
                 <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
