@@ -29,7 +29,7 @@ class ResPartnerCredit(models.Model):
     
     company_id = fields.Many2one(
         comodel_name='res.company',
-        string='Company Id',
+        string='Company',
     )
 
     reason = fields.Text(
@@ -61,7 +61,11 @@ class ResPartnerCredit(models.Model):
     @api.multi
     def button_validate_partner_credit(self):
         for record in self:
-            record.write({'state':'validated'})
+            partner_credit = self.env['res.partner.credit'].search([('company_id','=',record.company_id.id),('partner_id','=',record.partner_id.id),('id','!=',record.id)],limit=1)
+            print('partner_credit',partner_credit)
+            if partner_credit:
+                partner_credit.unlink()
+                record.write({'state':'validated'})
 
     @api.model
     def create(self, values):
