@@ -19,18 +19,12 @@
                 <xpath expr="//field[@name='order_line']/form/group/group/label[@for='analytic_tag_ids']" position="before">
                     <label for="warehouse_quantities" />
                     <div>
-                        <field name="warehouse_quantities" />
+                        <field name="warehouse_quantities"/>
                     </div>
-                </xpath>
-
-                <xpath expr="//field[@name='order_line']/form/div/field[@name='invoice_lines']" position="before">
-                    <field name="line_supplier_ids">
-                        <tree editable="bottom">
-                            <field name="line_id" invisible="1"/>
-                            <field name="supplier_id"/>
-                            <field name="qty"/>
-                        </tree>
-                    </field>
+                    <div>
+                        <label for="supplier_id" />
+                        <field name="supplier_id"/>
+                    </div>
                 </xpath>
 
                 <button name="action_confirm" position="after">
