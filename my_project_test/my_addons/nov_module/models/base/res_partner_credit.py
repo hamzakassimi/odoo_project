@@ -62,10 +62,9 @@ class ResPartnerCredit(models.Model):
     def button_validate_partner_credit(self):
         for record in self:
             partner_credit = self.env['res.partner.credit'].search([('company_id','=',record.company_id.id),('partner_id','=',record.partner_id.id),('id','!=',record.id)],limit=1)
-            print('partner_credit',partner_credit)
             if partner_credit:
                 partner_credit.unlink()
-                record.write({'state':'validated'})
+            record.write({'state':'validated'})
 
     @api.model
     def create(self, values):
