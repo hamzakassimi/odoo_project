@@ -75,11 +75,17 @@
                         ('picking_type_code', '!=','outgoing')]}"
                     />
                 </button>
-
-               <xpath expr="//button[@name='button_validate']" position="attributes">
+                <xpath expr="//button[@name='button_validate']" position="after">
+                    <button name="button_validate" string="Validate" groups="stock.group_stock_user" type="object" class="oe_highlight"  attrs="{'invisible': 
+                        ['|','|',('picking_type_code', '!=', 'outgoing'),
+                        ('additional_state','in',('waiting','good_for_loading','good_on_move','at_the_carrier','ready')),
+                        ('state','=','done')
+                        ]}"/>
+                </xpath>
+                <xpath expr="//button[@name='button_validate']" position="attributes">
                     <attribute name="attrs">{'invisible': 
                         ['|',('show_validate', '=', False),
-                        ('additional_state','in',('waiting','good_for_loading','good_on_move','at_the_carrier','ready'))
+                        ('picking_type_code', '=','outgoing')
                         ]}</attribute>
                 </xpath>
 
