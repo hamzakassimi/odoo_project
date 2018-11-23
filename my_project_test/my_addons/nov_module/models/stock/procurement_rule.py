@@ -23,11 +23,11 @@ class ProcurementRule(models.Model):
             if values['warehouse_id']['flag'] == True:
                 return product_supplier
             else:
-                sale_order_line =  values['move_dest_ids']['sale_line_id']
-                related_supplier = self.env['product.supplierinfo'].search([('name','=',sale_order_line.supplier_id.id)],limit=1)
-                if related_supplier:
-                    return related_supplier
-                else:
-                    raise ValidationError(_('No supplier Defined in the line of sale order!please define.'))
-        else:
-            return suppliers[0]
+                if 'move_dest_ids' in values.keys():
+                    sale_order_line =  values['move_dest_ids']['sale_line_id']
+                    related_supplier = self.env['product.supplierinfo'].search([('name','=',sale_order_line.supplier_id.id)],limit=1)
+                    if related_supplier:
+                        return related_supplier
+                    else:
+                        raise ValidationError(_('No supplier Defined in the line of sale order!please define.'))
+        return super(ProcurementRule,self)._make_po_select_supplier(values,suppliers)
