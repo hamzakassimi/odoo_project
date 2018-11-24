@@ -35,6 +35,14 @@ class SaleOrder(models.Model):
         default=False,
     )
 
+    technical_line_ids = fields.One2many(
+        comodel_name='technical.sale.order.line',
+        inverse_name='technical_sale_id',
+        string="Technical Sale Lines [TECHNICAL]",
+        compute="_compute_technical_line_ids",
+        store = True
+    )
+
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------
@@ -137,3 +145,40 @@ class SaleOrder(models.Model):
     @api.multi
     def button_validate(self):
         return self.write({'is_public': False})
+
+
+    @api.multi
+    @api.depends('order_line.product_id',
+                 'order_line.product_uom_qty',
+                 'order_line.product_uom',
+                 'order_line.tax_id',
+                 'order_line.price_unit',
+                 'order_line.price_subtotal',
+                 'order_line.price_total')
+    def _compute_technical_line_ids(self):
+        technical_sale_order_line__env = self.env['technical.sale.order.line']
+        for record in self:
+            rec_technical_order_lines = {}
+            for order_line in record.order_line:
+                if order_line.product_id.id in rec_technical_order_lines:
+                    stock_conv_qty = order_line.product_uom._compute_quantity(order_line.product_uom_qty, order_line.product_id.uom_id)
+                    rec_technical_order_lines[order_line.product_id.id]['product_uom_qty'] += stock_conv_qty
+                    rec_technical_order_lines[order_line.product_id.id]['price_unit'] += order_line.price_unit
+                    rec_technical_order_lines[order_line.product_id.id]['price_subtotal'] += order_line.price_subtotal
+                    rec_technical_order_lines[order_line.product_id.id]['price_total'] += order_line.price_total
+                else:
+                    rec_technical_order_lines[order_line.product_id.id] = {
+                        'product_id': order_line.product_id.id,
+                        'product_uom_qty': order_line.product_uom_qty,
+                        'product_uom': order_line.product_uom.id,
+                        'technical_sale_id':record.id,
+                        'price_unit':order_line.price_unit,
+                        'price_subtotal':order_line.price_subtotal,
+                        'price_total':order_line.price_total,
+                        'tax_id':order_line[0].tax_id,
+                        }
+
+            list_order_lines = []
+            for line in rec_technical_order_lines.values():
+                list_order_lines.append((0,0,line))
+            record.technical_line_ids = list_order_lines

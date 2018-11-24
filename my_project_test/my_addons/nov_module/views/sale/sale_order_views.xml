@@ -66,8 +66,23 @@
                 <xpath expr="//button[@name='action_cancel']" position="attributes">
                     <attribute name="attrs">{'invisible':['|',('is_public','=',True)]}</attribute>
                 </xpath>
-
-
+                <xpath expr="//page[2]" position="after">
+                    <page name="technical_line" string="Technical Lines">
+                        <field name="technical_line_ids" widget="one2many_list">
+                            <tree editable="bottom">
+                                <field name="product_id"/>
+                                <field name="technical_sale_id" invisible="1"/>
+                                <field name="product_uom_qty"/>
+                                <field name="product_uom"/>
+                                <field name="price_unit"/>
+                                <field name="tax_id" widget="many2many_tags"/>
+                                <field name="price_subtotal" widget="monetary"/>
+                                <field name="price_total" widget="monetary"/>
+                                <field name="currency_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
             </field>
         </record>
 
