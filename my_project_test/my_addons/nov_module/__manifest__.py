@@ -50,6 +50,9 @@
         'views/sale/sale_order_views.xml',
         'views/project/project_project_views.xml',
         'views/product/product_template_views.xml',
+
+        # reports
+        'reports/sale_order_report.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
