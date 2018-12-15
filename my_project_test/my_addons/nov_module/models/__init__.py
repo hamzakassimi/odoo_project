@@ -5,3 +5,4 @@ from . import sale
 from . import stock
 from . import project
 from . import product
+from . import crm
