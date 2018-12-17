@@ -55,16 +55,22 @@ class ResPartnerCredit(models.Model):
     def get_selection_state(self):
         return [
             ('draft', _('Draft')),
-            ('validated', _('Validated'))
+            ('validated_r_a', _('Validated R.A')),
+            ('validated_dg', _('Validation DG')),
         ]
 
     @api.multi
-    def button_validate_partner_credit(self):
+    def button_validate_dg(self):
         for record in self:
             partner_credit = self.env['res.partner.credit'].search([('company_id','=',record.company_id.id),('partner_id','=',record.partner_id.id),('id','!=',record.id)],limit=1)
             if partner_credit:
                 partner_credit.unlink()
-            record.write({'state':'validated'})
+            record.write({'state':'validated_dg'})
+
+    @api.multi
+    def button_validate_ra(self):
+        for record in self:
+            record.write({'state':'validated_r_a'})
 
     @api.model
     def create(self, values):

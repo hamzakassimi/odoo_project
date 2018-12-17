@@ -8,19 +8,20 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
             	<header>
-                    <button name="button_validate_partner_credit" string="Validate" type="object" class="btn-primary" attrs="{'invisible': [('state','=','validated')]}" groups="nov_module.group_partner_credit_validation"/>
-	            	<field name="state"  widget="statusbar" statusbar_visible="draft,validated"/>
+                    <button name="button_validate_ra" string="Validation R.A" type="object" class="btn-primary" attrs="{'invisible': [('state','!=','draft')]}" groups="nov_module.group_partner_credit_validation_ra"/>
+                    <button name="button_validate_dg" string="Validation DG" type="object" class="btn-primary" attrs="{'invisible': [('state','!=','validated_r_a')]}" groups="nov_module.group_partner_credit_validation"/>
+	            	<field name="state"  widget="statusbar" statusbar_visible="draft,validated_r_a,validated_dg"/>
 	            </header>
             	<group>
                     <group>
                         <field name="name"/>
-                        <field name="partner_id" attrs="{'readonly': [('state', '=', 'validated')]}"/>
-                        <field name="requested_client_limit" attrs="{'readonly': [('state', '=', 'validated')]}"/>
-                        <field name="ca_client" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                        <field name="partner_id" attrs="{'readonly': [('state', 'in', ('validated_r_a','validated_dg'))]}"/>
+                        <field name="requested_client_limit" attrs="{'readonly': [('state', 'in', ('validated_r_a','validated_dg'))]}"/>
+                        <field name="ca_client" attrs="{'readonly': [('state', 'in', ('validated_r_a','validated_dg'))]}"/>
                     </group>
                     <group>
-                        <field name="company_id" attrs="{'readonly': [('state', '=', 'validated')]}"/>
-                        <field name="reason" attrs="{'readonly': [('state', '=', 'validated')]}"/>
+                        <field name="company_id" attrs="{'readonly': [('state', 'in', ('validated_r_a','validated_dg'))]}"/>
+                        <field name="reason" attrs="{'readonly': [('state', 'in', ('validated_r_a','validated_dg'))]}"/>
                     </group>
                 </group>
             </field>

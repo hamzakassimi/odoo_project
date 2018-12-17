@@ -25,14 +25,29 @@ class StockPicking(models.Model):
         selection='get_selection_carrier_type',
     )
 
-    warehouse_man = fields.Many2one(
+    warehouse_man_id = fields.Many2one(
         comodel_name='hr.employee',
         string='WarehouseMan',
     )
 
-    charger = fields.Many2one(
+    charger_id = fields.Many2one(
         comodel_name='hr.employee',
         string='Charger',
+    )
+
+    magasinier_id = fields.Many2one(
+        comodel_name='hr.employee',
+        string='Magasinier',
+    )
+
+    clariste_id = fields.Many2one(
+        comodel_name='hr.employee',
+        string='Clariste',
+    )
+
+    ouvrier_id = fields.Many2one(
+        comodel_name='hr.employee',
+        string='Ouvrier',
     )
 
     # ------------------------------------------------------------------------
