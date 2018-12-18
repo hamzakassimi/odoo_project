@@ -47,6 +47,22 @@ class ResPartnerCredit(models.Model):
         selection='get_selection_state'
     )
 
+    total_so = fields.Float(
+        string='Total SO',
+        compute='_compute_total_so',
+    )
+
+    total_so_payed = fields.Float(
+        string='Total SO Payed',
+        compute='_compute_total_so',
+
+    )
+
+    total_so_no_payed = fields.Float(
+        string='Total SO No Payed',
+        compute='_compute_total_so',
+    )
+
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------
@@ -79,3 +95,25 @@ class ResPartnerCredit(models.Model):
             'name': seq
         })
         return super(ResPartnerCredit, self).create(values)
+
+    @api.multi
+    @api.depends('partner_id')
+    def _compute_total_so(self):
+        for record in self:
+            total_so = 0.0
+            total_so_payed = 0.0
+            total_so_no_payed = 0.0
+            related_so = self.env['sale.order'].search([('partner_id','=',record.partner_id.id)])
+            for so in related_so:
+                total_so += so.amount_total
+                if so.invoice_ids:
+                    for invoice in so.invoice_ids:
+                        if invoice.state=='paid':
+                            total_so_payed += invoice.amount_total
+                        else:
+                            total_so_no_payed += invoice.amount_total
+                else:
+                    total_so_no_payed += so.amount_total
+            record.total_so = total_so
+            record.total_so_no_payed = total_so_no_payed
+            record.total_so_payed = total_so_payed

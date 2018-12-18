@@ -23,6 +23,11 @@
                         <field name="company_id" attrs="{'readonly': [('state', 'in', ('validated_r_a','validated_dg'))]}"/>
                         <field name="reason" attrs="{'readonly': [('state', 'in', ('validated_r_a','validated_dg'))]}"/>
                     </group>
+                    <group name="sales_details" string="Sales Details">
+                        <field name="total_so"/>
+                        <field name="total_so_no_payed"/>
+                        <field name="total_so_payed"/>
+                    </group>
                 </group>
             </field>
         </record>
@@ -39,6 +44,9 @@
                 <field name="requested_client_limit"/>
                 <field name="ca_client"/>
                 <field name="reason"/>
+                <field name="total_so"/>
+                <field name="total_so_no_payed"/>
+                <field name="total_so_payed"/>
                 <field name="state"/>
             </field>
         </record>

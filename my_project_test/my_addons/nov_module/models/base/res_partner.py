@@ -52,6 +52,10 @@ class ResPartner(models.Model):
         column2='project_id',
     )
 
+    rc_city = fields.Char(
+        string='RC City',
+    )
+
 
     # ------------------------------------------------------------------------
     # CONSTRAINTS
@@ -59,7 +63,7 @@ class ResPartner(models.Model):
 
     _sql_constraints = [
         ('ice', 'UNIQUE(ice)', 'ICE must be unique!'),
-        ('rc', 'UNIQUE(rc)', 'RC must be unique!'),
+        ('rc', 'UNIQUE(rc,rc_city)', 'RC must be unique per city!'),
         ('cnss', 'UNIQUE(cnss)', 'CNSS must be unique!'),
     ]
 

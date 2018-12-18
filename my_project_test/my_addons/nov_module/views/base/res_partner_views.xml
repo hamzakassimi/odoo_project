@@ -19,6 +19,7 @@
             				<field name="compte"/>
             				<field name="ice"/>
             				<field name="rc"/>
+                            <field name="rc_city"/>
                             <field name="cnss"/>
             			</group>
             		</page>
