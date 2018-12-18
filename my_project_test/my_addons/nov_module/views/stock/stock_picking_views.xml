@@ -23,8 +23,11 @@
                 </xpath>
                 <field name="owner_id" position="after">
                     <field name="carrier_type" attrs="{'readonly': [('additional_state', '=', 'good_for_loading')]}"/>
-                    <field name="warehouse_man"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
-                    <field name="charger"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
+                    <field name="warehouse_man_id"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
+                    <field name="charger_id"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
+                    <field name="magasinier_id"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
+                    <field name="clariste_id"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
+                    <field name="ouvrier_id"  attrs="{'invisible': [('additional_state', '!=', 'good_for_loading')]}"/>
                 </field>
 
                 <button name="do_print_picking" position="before">

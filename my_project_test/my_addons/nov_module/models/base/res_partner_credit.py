@@ -47,6 +47,22 @@ class ResPartnerCredit(models.Model):
         selection='get_selection_state'
     )
 
+    total_so = fields.Float(
+        string='Total SO',
+        compute='_compute_total_so',
+    )
+
+    total_so_payed = fields.Float(
+        string='Total SO Payed',
+        compute='_compute_total_so',
+
+    )
+
+    total_so_no_payed = fields.Float(
+        string='Total SO No Payed',
+        compute='_compute_total_so',
+    )
+
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------
@@ -55,16 +71,22 @@ class ResPartnerCredit(models.Model):
     def get_selection_state(self):
         return [
             ('draft', _('Draft')),
-            ('validated', _('Validated'))
+            ('validated_r_a', _('Validated R.A')),
+            ('validated_dg', _('Validation DG')),
         ]
 
     @api.multi
-    def button_validate_partner_credit(self):
+    def button_validate_dg(self):
         for record in self:
             partner_credit = self.env['res.partner.credit'].search([('company_id','=',record.company_id.id),('partner_id','=',record.partner_id.id),('id','!=',record.id)],limit=1)
             if partner_credit:
                 partner_credit.unlink()
-            record.write({'state':'validated'})
+            record.write({'state':'validated_dg'})
+
+    @api.multi
+    def button_validate_ra(self):
+        for record in self:
+            record.write({'state':'validated_r_a'})
 
     @api.model
     def create(self, values):
@@ -73,3 +95,25 @@ class ResPartnerCredit(models.Model):
             'name': seq
         })
         return super(ResPartnerCredit, self).create(values)
+
+    @api.multi
+    @api.depends('partner_id')
+    def _compute_total_so(self):
+        for record in self:
+            total_so = 0.0
+            total_so_payed = 0.0
+            total_so_no_payed = 0.0
+            related_so = self.env['sale.order'].search([('partner_id','=',record.partner_id.id)])
+            for so in related_so:
+                total_so += so.amount_total
+                if so.invoice_ids:
+                    for invoice in so.invoice_ids:
+                        if invoice.state=='paid':
+                            total_so_payed += invoice.amount_total
+                        else:
+                            total_so_no_payed += invoice.amount_total
+                else:
+                    total_so_no_payed += so.amount_total
+            record.total_so = total_so
+            record.total_so_no_payed = total_so_no_payed
+            record.total_so_payed = total_so_payed

@@ -52,6 +52,10 @@ class ResPartner(models.Model):
         column2='project_id',
     )
 
+    rc_city = fields.Char(
+        string='RC City',
+    )
+
 
     # ------------------------------------------------------------------------
     # CONSTRAINTS
@@ -59,13 +63,20 @@ class ResPartner(models.Model):
 
     _sql_constraints = [
         ('ice', 'UNIQUE(ice)', 'ICE must be unique!'),
-        ('rc', 'UNIQUE(rc)', 'RC must be unique!'),
+        ('rc', 'UNIQUE(rc,rc_city)', 'RC must be unique per city!'),
         ('cnss', 'UNIQUE(cnss)', 'CNSS must be unique!'),
     ]
 
     # ------------------------------------------------------------------------
     # METHODS
     # ------------------------------------------------------------------------
+
+    @api.constrains('rc','cnss')
+    def check_ice_cnss_rc(self):
+        if len(str(self.rc))!=6:
+            raise ValidationError(_('RC cannot be great or less than 6'))
+        if len(str(self.cnss))!=6:
+            raise ValidationError(_('CNSS cannot be great or less than 6'))
 
     @api.model
     def get_selection_compte(self):
@@ -99,6 +110,8 @@ class ResPartner(models.Model):
                     raise ValidationError(_('No CNSS specified for the client : %s')  % (record.name))
                 elif not record.category_id:
                     raise ValidationError(_('No tags specified for the client : %s')  % (record.name))
+                elif not record.child_ids:
+                    raise ValidationError(_('No contacts specified for the client : %s')  % (record.name))
                 elif record.child_ids:
                     for child in record.child_ids:
                         if child.type=='contact':
@@ -106,7 +119,33 @@ class ResPartner(models.Model):
                                 raise ValidationError(_('No email specified for the contact : %s')  % (child.name))
                             elif not child.phone:
                                 raise ValidationError(_('No phone specified for the contact : %s')  % (child.name))
-                        record.write({'state':'validated'})
+                            elif not child.name:
+                                raise ValidationError(_('No name specified for the contact : %s')  % (child.name))
+                            record.write({'state':'validated'})
+                        elif child.type =='invoice':
+                            if not child.email:
+                                raise ValidationError(_('No email specified for the contact : %s')  % (child.name))
+                            elif not child.phone:
+                                raise ValidationError(_('No phone specified for the contact : %s')  % (child.name))
+                            elif not child.street and \
+                             not child.city and\
+                             not child.country_id:
+                                raise ValidationError(_('No address specified for the client : %s')  % (child.name))
+                            elif not child.name:
+                                raise ValidationError(_('No name specified for the contact : %s')  % (child.name))
+                            record.write({'state':'validated'})
+                        if child.type == 'delivery':
+                            if not child.email:
+                                raise ValidationError(_('No email specified for the contact : %s')  % (child.name))
+                            elif not child.phone:
+                                raise ValidationError(_('No phone specified for the contact : %s')  % (child.name))
+                            elif not child.street and \
+                             not child.city and\
+                             not child.country_id:
+                                raise ValidationError(_('No address specified for the client : %s')  % (child.name))
+                            elif not child.name:
+                                raise ValidationError(_('No name specified for the contact : %s')  % (child.name))
+                            record.write({'state':'validated'})
                 else:
                     record.write({'state':'validated'})
             elif record.compte=="au_comptant":

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-    	<!-- Group for partner limit validation --> 
+    	<!-- Group for partner limit validation DG --> 
     	<record id="group_partner_credit_validation" model="res.groups">
-            <field name="name">Partner Credit Validation</field>
+            <field name="name">Partner Credit Validation DG</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+
+        <record id="group_partner_credit_validation_ra" model="res.groups">
+            <field name="name">Partner Credit Validation R.A</field>
             <field name="users" eval="[(4, ref('base.user_root'))]"/>
         </record>
 
