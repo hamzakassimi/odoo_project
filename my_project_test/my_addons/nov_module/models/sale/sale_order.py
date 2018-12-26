@@ -182,3 +182,14 @@ class SaleOrder(models.Model):
             for line in rec_technical_order_lines.values():
                 list_order_lines.append((0,0,line))
             record.technical_line_ids = list_order_lines
+
+    @api.multi
+    def button_add_product(self):
+        return  {
+            'name': _('Add Product'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'wizard.add.product',
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
