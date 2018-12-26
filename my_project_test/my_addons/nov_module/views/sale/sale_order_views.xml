@@ -83,6 +83,9 @@
                         </field>
                     </page>
                 </xpath>
+                <xpath expr="//field[@name='order_line']" position="before">
+                    <button name="button_add_product" string="ADD Product" type="object" class="btn-primary"/>
+                </xpath>
             </field>
         </record>
 

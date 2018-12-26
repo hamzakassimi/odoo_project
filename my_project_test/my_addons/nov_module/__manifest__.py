@@ -51,6 +51,9 @@
         'views/project/project_project_views.xml',
         'views/product/product_template_views.xml',
 
+        #wizards
+        'wizard/wizard_add_product_view.xml',
+
         # reports
         'reports/sale_order_report.xml',
     ],
