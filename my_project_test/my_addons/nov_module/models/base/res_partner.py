@@ -41,7 +41,7 @@ class ResPartner(models.Model):
         required=True,
         comodel_name='res.partner.credit',
         inverse_name='partner_id',
-        domain=[('state','=','validated')]
+        domain=[('state','=','validated_dg')]
     )
 
     project_ids = fields.Many2many(
@@ -71,12 +71,22 @@ class ResPartner(models.Model):
     # METHODS
     # ------------------------------------------------------------------------
 
-    @api.constrains('rc','cnss')
+    @api.constrains('rc','cnss','ice')
     def check_ice_cnss_rc(self):
-        if len(str(self.rc))!=6:
-            raise ValidationError(_('RC cannot be great or less than 6'))
-        if len(str(self.cnss))!=6:
-            raise ValidationError(_('CNSS cannot be great or less than 6'))
+        if self.compte=='au_compte':
+            related_ice = self.env['res.partner'].search([('id','!=',self.id),('ice','=',self.ice)])
+            related_rc = self.env['res.partner'].search([('id','!=',self.id),('rc','=',self.rc)])
+            related_cnss = self.env['res.partner'].search([('id','!=',self.id),('cnss','=',self.cnss)])
+            if len(related_ice)>1:
+                raise ValidationError(_('ICE must be unique!'))
+            if len(related_rc)>1:
+                raise ValidationError(_('RC must be unique!'))
+            if len(related_cnss)>1:
+                raise ValidationError(_('CNSS must be unique!'))
+            if len(str(self.rc))!=6:
+                raise ValidationError(_('RC cannot be great or less than 6'))
+            if len(str(self.cnss))!=6:
+                raise ValidationError(_('CNSS cannot be great or less than 6'))
 
     @api.model
     def get_selection_compte(self):
