@@ -18,7 +18,6 @@ class SaleOrderLine(models.Model):
      
     warehouse_quantities = fields.Text(
         string='Warehouses quantities',
-        compute='compute_warehouse_quantities'
     )
 
     supplier_id = fields.Many2one(
@@ -32,7 +31,8 @@ class SaleOrderLine(models.Model):
     # ------------------------------------------------------------------------
 
     @api.multi
-    def compute_warehouse_quantities(self):
+    @api.onchange('product_id')
+    def onchage_warehouse_quantities(self):
         for record in self:
             warehouse_quantities = ''
             for quant in record.product_id.stock_quant_ids:
@@ -40,6 +40,12 @@ class SaleOrderLine(models.Model):
                 if related_warehouse:
                     warehouse_quantities += 'Quantity' + ' : ' + str(quant.quantity) +  ' /' +'Warehouse' + ' : ' + related_warehouse.name + '\n'
                 record.warehouse_quantities = warehouse_quantities
+            return {
+                'warning': {
+                    'title': _('Warning'),
+                    'message': _("those are the quantities disponible in your warehouses %s.") % (record.warehouse_quantities),
+            },
+        }
 
     @api.multi
     def _check_package(self):

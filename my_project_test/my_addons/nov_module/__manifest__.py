@@ -50,6 +50,7 @@
         'views/sale/sale_order_views.xml',
         'views/project/project_project_views.xml',
         'views/product/product_template_views.xml',
+        'views/product/product_supplierinfo_views.xml',
 
         #wizards
         'wizard/wizard_add_product_view.xml',

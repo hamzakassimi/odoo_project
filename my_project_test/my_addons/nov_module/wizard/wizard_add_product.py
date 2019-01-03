@@ -17,6 +17,27 @@ class WizardAddProduct(models.TransientModel):
         string='Quantite',
     )
 
+    warehouse_quantities = fields.Text(
+        string='Warehouses quantities',
+    )
+
+    @api.multi
+    @api.onchange('product_id')
+    def onchage_warehouse_quantities(self):
+        for record in self:
+            warehouse_quantities = ''
+            for quant in record.product_id.stock_quant_ids:
+                related_warehouse = self.env['stock.warehouse'].search([('company_id','=',quant.company_id.id)],limit=1)
+                if related_warehouse:
+                    warehouse_quantities += 'Quantity' + ' : ' + str(quant.quantity) +  ' /' +'Warehouse' + ' : ' + related_warehouse.name + '\n'
+                record.warehouse_quantities = warehouse_quantities
+            return {
+                'warning': {
+                    'title': _('Warning'),
+                    'message': _("those are the quantities disponible in your warehouses %s.") % (record.warehouse_quantities),
+            },
+        }
+
     @api.multi
     def button_confirm(self):
         self.ensure_one()
