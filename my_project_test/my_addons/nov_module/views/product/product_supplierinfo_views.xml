@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <field name="company_id" position="after">
                 	<group>
-                		<field name="priortiy" widget="radio"/>
+                		<field name="priority" widget="radio"/>
                 	</group>
                 </field>
             </field>

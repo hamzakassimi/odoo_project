@@ -13,7 +13,7 @@ class ProductSupplierinfo(models.Model):
     # FIELDS
     # ------------------------------------------------------------------------
 	
-    priortiy = fields.Selection(
+    priority = fields.Selection(
         string='Priority',
         selection='get_selection_priority'
     )

@@ -45,7 +45,7 @@ class WizardAddProduct(models.TransientModel):
         active_rec = self.env['sale.order'].browse(self._context.get('active_id'))
         related_stock_quant = self.env['stock.quant'].search([
             ('product_id','=',self.product_id.id),
-            ('company_id','=',current_company.id)
+            ('company_id','=',current_company.id),
         ],limit=1)
         if related_stock_quant.quantity >0:
             if self.qty <= related_stock_quant.quantity:
@@ -66,9 +66,187 @@ class WizardAddProduct(models.TransientModel):
                 active_rec.order_line = [(0,0,vals)]
                 need = self.qty - related_stock_quant.quantity
                 for vendor in self.product_id.seller_ids:
+                    if vendor.priority=='one':
+                        supplier_stock_quant = self.env['stock.quant'].search([
+                            ('product_id','=',self.product_id.id),
+                            ('company_id.partner_id','=',vendor.name.id)
+                        ],limit=1)
+                        if supplier_stock_quant.quantity > 0:
+                            if need >= supplier_stock_quant.quantity:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':supplier_stock_quant.quantity,
+                                    'supplier_id':vendor.name.id
+                                }
+                                need = need - supplier_stock_quant.quantity
+                                active_rec.order_line = [(0,0,vals)]
+                            else:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':need,
+                                    'supplier_id':vendor.name.id
+                                }
+                                active_rec.order_line = [(0,0,vals)]
+                    elif vendor.priority=='two':
+                        supplier_stock_quant = self.env['stock.quant'].search([
+                            ('product_id','=',self.product_id.id),
+                            ('company_id.partner_id','=',vendor.name.id)
+                        ],limit=1)
+                        if supplier_stock_quant.quantity > 0:
+                            if need >= supplier_stock_quant.quantity:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':supplier_stock_quant.quantity,
+                                    'supplier_id':vendor.name.id
+                                }
+                                need = need - supplier_stock_quant.quantity
+                                active_rec.order_line = [(0,0,vals)]
+                            else:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':need,
+                                    'supplier_id':vendor.name.id
+                                }
+                                active_rec.order_line = [(0,0,vals)]
+                    elif vendor.priority=='three':
+                        supplier_stock_quant = self.env['stock.quant'].search([
+                            ('product_id','=',self.product_id.id),
+                            ('company_id.partner_id','=',vendor.name.id)
+                        ],limit=1)
+                        if supplier_stock_quant.quantity > 0:
+                            if need >= supplier_stock_quant.quantity:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':supplier_stock_quant.quantity,
+                                    'supplier_id':vendor.name.id
+                                }
+                                need = need - supplier_stock_quant.quantity
+                                active_rec.order_line = [(0,0,vals)]
+                            else:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':need,
+                                    'supplier_id':vendor.name.id
+                                }
+                                active_rec.order_line = [(0,0,vals)]
+                    elif vendor.priority=='for':
+                        supplier_stock_quant = self.env['stock.quant'].search([
+                            ('product_id','=',self.product_id.id),
+                            ('company_id.partner_id','=',vendor.name.id)
+                        ],limit=1)
+                        if supplier_stock_quant.quantity > 0:
+                            if need >= supplier_stock_quant.quantity:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':supplier_stock_quant.quantity,
+                                    'supplier_id':vendor.name.id
+                                }
+                                need = need - supplier_stock_quant.quantity
+                                active_rec.order_line = [(0,0,vals)]
+                            else:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':need,
+                                    'supplier_id':vendor.name.id
+                                }
+                                active_rec.order_line = [(0,0,vals)]
+                    elif vendor.priority=='five':
+                        supplier_stock_quant = self.env['stock.quant'].search([
+                            ('product_id','=',self.product_id.id),
+                            ('company_id.partner_id','=',vendor.name.id)
+                        ],limit=1)
+                        if supplier_stock_quant.quantity > 0:
+                            if need >= supplier_stock_quant.quantity:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':supplier_stock_quant.quantity,
+                                    'supplier_id':vendor.name.id
+                                }
+                                need = need - supplier_stock_quant.quantity
+                                active_rec.order_line = [(0,0,vals)]
+                            else:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':need,
+                                    'supplier_id':vendor.name.id
+                                }
+                                active_rec.order_line = [(0,0,vals)]
+                    else:
+                        supplier_stock_quant = self.env['stock.quant'].search([
+                            ('product_id','=',self.product_id.id),
+                            ('company_id.partner_id','=',vendor.name.id)
+                        ],limit=1)
+                        if supplier_stock_quant.quantity > 0:
+                            if need >= supplier_stock_quant.quantity:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':supplier_stock_quant.quantity,
+                                    'supplier_id':vendor.name.id
+                                }
+                                need = need - supplier_stock_quant.quantity
+                                active_rec.order_line = [(0,0,vals)]
+                            else:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':need,
+                                    'supplier_id':vendor.name.id
+                                }
+                                active_rec.order_line = [(0,0,vals)]
+        else:
+            for vendor in self.product_id.seller_ids:
+                if vendor.priority=='one':
+                        supplier_stock_quant = self.env['stock.quant'].search([
+                            ('product_id','=',self.product_id.id),
+                            ('company_id.partner_id','=',vendor.name.id)
+                        ],limit=1)
+                        if supplier_stock_quant.quantity > 0:
+                            if need >= supplier_stock_quant.quantity:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':supplier_stock_quant.quantity,
+                                    'supplier_id':vendor.name.id
+                                }
+                                need = need - supplier_stock_quant.quantity
+                                active_rec.order_line = [(0,0,vals)]
+                            else:
+                                vals = {
+                                    'order_id':active_rec.id,
+                                    'product_id':self.product_id.id,
+                                    'name':self.product_id.display_name,
+                                    'product_uom_qty':need,
+                                    'supplier_id':vendor.name.id
+                                }
+                                active_rec.order_line = [(0,0,vals)]
+                elif vendor.priority=='two':
                     supplier_stock_quant = self.env['stock.quant'].search([
                         ('product_id','=',self.product_id.id),
-                        ('company_id','=',vendor.company_id.id)
+                        ('company_id.partner_id','=',vendor.name.id)
                     ],limit=1)
                     if supplier_stock_quant.quantity > 0:
                         if need >= supplier_stock_quant.quantity:
@@ -90,31 +268,104 @@ class WizardAddProduct(models.TransientModel):
                                 'supplier_id':vendor.name.id
                             }
                             active_rec.order_line = [(0,0,vals)]
-        else:
-            for vendor in self.product_id.seller_ids:
-                supplier_stock_quant = self.env['stock.quant'].search([
-                    ('product_id','=',self.product_id.id),
-                    ('company_id','=',vendor.company_id.id)
-                ],limit=1)
-                need = self.qty
-                if supplier_stock_quant.quantity > 0:
-                    if need >= supplier_stock_quant.quantity:
-                        vals = {
-                            'order_id':active_rec.id,
-                            'product_id':self.product_id.id,
-                            'name':self.product_id.display_name,
-                            'product_uom_qty':supplier_stock_quant.quantity,
-                            'supplier_id':vendor.name.id
-                        }
-                        need = need - supplier_stock_quant.quantity
-                        active_rec.order_line = [(0,0,vals)]
-                    else:
-                        vals = {
-                            'order_id':active_rec.id,
-                            'product_id':self.product_id.id,
-                            'name':self.product_id.display_name,
-                            'product_uom_qty':need,
-                            'supplier_id':vendor.name.id
-                        }
-                        active_rec.order_line = [(0,0,vals)]
+                elif vendor.priority=='three':
+                    supplier_stock_quant = self.env['stock.quant'].search([
+                        ('product_id','=',self.product_id.id),
+                        ('company_id.partner_id','=',vendor.name.id)
+                    ],limit=1)
+                    if supplier_stock_quant.quantity > 0:
+                        if need >= supplier_stock_quant.quantity:
+                            vals = {
+                                'order_id':active_rec.id,
+                                'product_id':self.product_id.id,
+                                'name':self.product_id.display_name,
+                                'product_uom_qty':supplier_stock_quant.quantity,
+                                'supplier_id':vendor.name.id
+                            }
+                            need = need - supplier_stock_quant.quantity
+                            active_rec.order_line = [(0,0,vals)]
+                        else:
+                            vals = {
+                                'order_id':active_rec.id,
+                                'product_id':self.product_id.id,
+                                'name':self.product_id.display_name,
+                                'product_uom_qty':need,
+                                'supplier_id':vendor.name.id
+                            }
+                            active_rec.order_line = [(0,0,vals)]
+                elif vendor.priority=='for':
+                    supplier_stock_quant = self.env['stock.quant'].search([
+                        ('product_id','=',self.product_id.id),
+                        ('company_id.partner_id','=',vendor.name.id)
+                    ],limit=1)
+                    if supplier_stock_quant.quantity > 0:
+                        if need >= supplier_stock_quant.quantity:
+                            vals = {
+                                'order_id':active_rec.id,
+                                'product_id':self.product_id.id,
+                                'name':self.product_id.display_name,
+                                'product_uom_qty':supplier_stock_quant.quantity,
+                                'supplier_id':vendor.name.id
+                            }
+                            need = need - supplier_stock_quant.quantity
+                            active_rec.order_line = [(0,0,vals)]
+                        else:
+                            vals = {
+                                'order_id':active_rec.id,
+                                'product_id':self.product_id.id,
+                                'name':self.product_id.display_name,
+                                'product_uom_qty':need,
+                                'supplier_id':vendor.name.id
+                            }
+                            active_rec.order_line = [(0,0,vals)]
+                elif vendor.priority=='five':
+                    supplier_stock_quant = self.env['stock.quant'].search([
+                        ('product_id','=',self.product_id.id),
+                        ('company_id.partner_id','=',vendor.name.id)
+                    ],limit=1)
+                    if supplier_stock_quant.quantity > 0:
+                        if need >= supplier_stock_quant.quantity:
+                            vals = {
+                                'order_id':active_rec.id,
+                                'product_id':self.product_id.id,
+                                'name':self.product_id.display_name,
+                                'product_uom_qty':supplier_stock_quant.quantity,
+                                'supplier_id':vendor.name.id
+                            }
+                            need = need - supplier_stock_quant.quantity
+                            active_rec.order_line = [(0,0,vals)]
+                        else:
+                            vals = {
+                                'order_id':active_rec.id,
+                                'product_id':self.product_id.id,
+                                'name':self.product_id.display_name,
+                                'product_uom_qty':need,
+                                'supplier_id':vendor.name.id
+                            }
+                            active_rec.order_line = [(0,0,vals)]
+                else:
+                    supplier_stock_quant = self.env['stock.quant'].search([
+                        ('product_id','=',self.product_id.id),
+                        ('company_id.partner_id','=',vendor.name.id)
+                    ],limit=1)
+                    if supplier_stock_quant.quantity > 0:
+                        if need >= supplier_stock_quant.quantity:
+                            vals = {
+                                'order_id':active_rec.id,
+                                'product_id':self.product_id.id,
+                                'name':self.product_id.display_name,
+                                'product_uom_qty':supplier_stock_quant.quantity,
+                                'supplier_id':vendor.name.id
+                            }
+                            need = need - supplier_stock_quant.quantity
+                            active_rec.order_line = [(0,0,vals)]
+                        else:
+                            vals = {
+                                'order_id':active_rec.id,
+                                'product_id':self.product_id.id,
+                                'name':self.product_id.display_name,
+                                'product_uom_qty':need,
+                                'supplier_id':vendor.name.id
+                            }
+                            active_rec.order_line = [(0,0,vals)]
         return True
